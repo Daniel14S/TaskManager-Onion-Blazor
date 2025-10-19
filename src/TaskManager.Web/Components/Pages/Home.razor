@@ -1,0 +1,121 @@
+﻿@page "/"
+@using TaskManager.Application.Interfaces
+@inject ITaskService TaskService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<PageTitle>Task Manager - Inicio</PageTitle>
+
+<div class="text-center mb-5">
+    <h1 class="display-4 fw-bold text-primary">📋 Task Manager</h1>
+    <p class="lead text-muted">Sistema de gestión de tareas con Arquitectura Onion</p>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-4">
+        <div class="card border-warning shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="display-1 text-warning mb-3">⏳</div>
+                <h3 class="card-title">@pendingCount</h3>
+                <p class="card-text text-muted">Tareas Pendientes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-success shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="display-1 text-success mb-3">✅</div>
+                <h3 class="card-title">@completedCount</h3>
+                <p class="card-text text-muted">Tareas Completadas</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-info shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="display-1 text-info mb-3">📊</div>
+                <h3 class="card-title">@totalCount</h3>
+                <p class="card-text text-muted">Total de Tareas</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">🏗️ Arquitectura del Proyecto</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h6 class="text-primary">Capas de la Arquitectura Onion:</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>🎨 Presentación (Web)</strong>
+                        <br><small class="text-muted">Blazor Server - Interfaz de usuario</small>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>🔧 Infraestructura</strong>
+                        <br><small class="text-muted">Entity Framework Core, Repositorios</small>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>💼 Aplicación</strong>
+                        <br><small class="text-muted">Servicios, Lógica de negocio</small>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>🎯 Dominio (Core)</strong>
+                        <br><small class="text-muted">Entidades, Reglas de negocio</small>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h6 class="text-primary">Tecnologías Utilizadas:</h6>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <span class="badge bg-primary">NET 8</span>
+                        Framework principal
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge bg-success">Blazor Server</span>
+                        UI interactiva
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge bg-info">Entity Framework Core</span>
+                        ORM
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge bg-secondary">SQLite</span>
+                        Base de datos local
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center">
+    <button class="btn btn-primary btn-lg shadow" @onclick="NavigateToTasks">
+        <span class="bi bi-plus"></span> Ir a Gestión de Tareas
+    </button>
+</div>
+
+@code {
+    private int pendingCount;
+    private int completedCount;
+    private int totalCount;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allTasks = await TaskService.GetAllTasksAsync();
+        var taskList = allTasks.ToList();
+        
+        pendingCount = taskList.Count(t => !t.IsCompleted);
+        completedCount = taskList.Count(t => t.IsCompleted);
+        totalCount = taskList.Count;
+    }
+
+    private void NavigateToTasks()
+    {
+        Navigation.NavigateTo("/tasks");
+    }
+}
