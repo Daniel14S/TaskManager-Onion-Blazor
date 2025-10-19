@@ -162,7 +162,8 @@ Este proyecto es de código abierto y está disponible bajo la licencia MIT.
 
 ## 👨‍💻 Autor
 
-Tu Nombre - [@tu-usuario](https://github.com/tu-usuario)
+Pedro Supe - [@Daniel14S](https://github.com/Daniel14S)
+Melany Cevallos - [@SalyC15](https://github.com/SalyC15)
 
 ## 🙏 Agradecimientos
 
